@@ -38,14 +38,20 @@ Tips and tricks
 ---------------
 
     1. Automatic Conversions:
-       a) Stars (*) at the start of lines are converted to bullets
-       b) Hash (#) at the start of the lines are converted to numbered lists
-       c) Dash (-) at the start of lines are converted to endash
+        a) Stars (*) at the start of lines are converted to bullets
+        b) Hash (#) at the start of the lines are converted to numbered lists
+        c) Dash (-) at the start of lines are converted to endash
 
     2. Comments in standup JSON file:
-       a) // commented lines are ignored and not ported to the next day
-       b) "// commented strings" are ignored for POST'ing but saved in the JSON
+        a) // commented lines are ignored and not ported to the next day
+        b) "// commented strings" are ignored for POST'ing but saved in the JSON
 
     3. Today to Yesterday:
-       a) When used daily, Today's lists are automattically appended to Yesterday's list
-
+        a) When used daily, Today's lists are automattically appended to Yesterday's list
+       
+    4. Update Standup:
+        a) Re-run, edit and save; it will update the post with the new data
+        
+    5. Delete Standup:
+        a) You can do it via the application or
+        b) Re-run, change 'live' to false and quit; it will remove the post
