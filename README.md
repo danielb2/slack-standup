@@ -11,9 +11,8 @@ Requirements:
 
 Setup:
 
-    Go here, scroll to the bottom and create OAuth token:
-    https://api.slack.com/web
-
+Go here, scroll to the bottom and create OAuth token:
+https://api.slack.com/web
 
     $ cd
     $ mkdir .startup
@@ -49,5 +48,5 @@ Tips and tricks
        b) "// commented strings" are ignored but saved in the JSON
 
     3. Today to Yesterday:
-       a) When used daily, Today's lists are automattically appened to Yesterday's list
+       a) When used daily, Today's lists are automattically appended to Yesterday's list
 
