@@ -1,0 +1,16 @@
+{
+  "name": "slack-statup",
+  "version": "1.0.0",
+  "description": "Slack standup script.",
+  "main": "index.js",
+  "scripts": {
+    "run": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "cmanion@walmartlabs.com",
+  "license": "ISC",
+  "dependencies": {
+    "json5": "^0.4.0",
+    "request": "^2.67.0"
+  }
+}

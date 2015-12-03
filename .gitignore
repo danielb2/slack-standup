@@ -1,0 +1,11 @@
+node_modules/
+
+.DS_Store
+.sass-cache/
+.tmp/
+test/coverage
+npm-debug.log
+
+# Editor files
+.idea
+.rcs
