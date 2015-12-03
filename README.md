@@ -39,9 +39,9 @@ Tips and tricks
 ---------------
 
     1. Automatic Conversions:
-       a) Stars (*) at the start of lines are converted automattically to bullets
-       b) Hash-dot (#.) at the start of the lines are converted to numbered lists
-       c) Dash (-) at the stare of lines are converted to endash
+       a) Stars (*) at the start of lines are converted to bullets
+       b) Hash (#) at the start of the lines are converted to numbered lists
+       c) Dash (-) at the start of lines are converted to endash
 
     2. Comments:
        a) // commented lines are ignored and not saved
