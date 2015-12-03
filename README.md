@@ -42,9 +42,9 @@ Tips and tricks
        b) Hash (#) at the start of the lines are converted to numbered lists
        c) Dash (-) at the start of lines are converted to endash
 
-    2. Comments:
-       a) // commented lines are ignored and not saved
-       b) "// commented strings" are ignored but saved in the JSON
+    2. Comments in standup JSON file:
+       a) // commented lines are ignored and not ported to the next day
+       b) "// commented strings" are ignored for POST'ing but saved in the JSON
 
     3. Today to Yesterday:
        a) When used daily, Today's lists are automattically appended to Yesterday's list
