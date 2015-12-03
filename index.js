@@ -17,7 +17,7 @@ var attachments = {
 
 // blank standup file for first time ...
 var blank_standup = {
-  live: true,
+  live: false,
   text: ["*Status Update*"],
   breakfast: ["* "],
   yesterday: ["* ", "* "],
