@@ -16,7 +16,6 @@ https://api.slack.com/web
 
     $ cd
     $ mkdir .startup
-    $ touch .slackrc.json
     $ vim .slackrc.json
       {
           "slack_token": "xxxx-DDDDDDDDDD-DDDDDDDDDDD-DDDDDDDDDDD-yyyyyyyyyy",
