@@ -3,10 +3,20 @@ Installation
 
 Requirements:
 
+These are the `env`, file and directory requirements. Go to setup and follow those
+steps to setup your system.
+
     1. ENV['HOME'] directory
+        a) this should already be set type: `env` to see your environment variables
+
     2. ENV['EDITOR'] or add to .slackrc.json as "editor". EX: "/usr/bin/vim"
+        a) `export EDITOR=“subl -w"` or `export EDITOR=“vim"`
+
     3. $HOME/.standup directory
+        a) need to create
+
     4. $HOME/.slackrc.json file - has to be valid JSON
+        a) need to create
 
 
 Setup:
@@ -48,10 +58,10 @@ Tips and tricks
 
     3. Today to Yesterday:
         a) When used daily, Today's lists are automattically appended to Yesterday's list
-       
+
     4. Update Standup:
         a) Re-run, edit and save; it will update the post with the new data
-        
+
     5. Delete Standup:
         a) You can do it via the application or
         b) Re-run, change 'live' to false and quit; it will remove the post
