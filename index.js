@@ -61,7 +61,14 @@ else {
 }
 
 // launch editor
-_.exec(config.editor, [].concat(config.editor_args, config.standup), {stdio: "inherit"});
+var editor = _.exec(config.editor, [].concat(config.editor_args, config.standup), {stdio: "inherit"});
+
+// failed to launch editor
+if (editor.status !== 0) {
+  // if not ok - exit (gives user feed back on parse errors)
+  console.log(_.format("Error: trying to launch editor: `%s %s %s`", config.editor, config.editor_args.join(" "), config.standup));
+  process.exit(1);
+}
 
 // parse standup file
 var standup = fs.readFileSync(config.standup, {encoding: "utf8"});
@@ -123,11 +130,11 @@ _.post(post_url, {form: new_standup}, function(err, resp, body) {
   var response_json = JSON.parse(body);
   if (response_json.ok) {
     if (standup_json.live) {
-      fs.writeFileSync(config.standup.replace(/\.txt$/, ".json"), JSON.stringify({ts: response_json.ts, channel: response_json.channel}), "utf8");
+      fs.writeFileSync(config.standup_ts_file, JSON.stringify({ts: response_json.ts, channel: response_json.channel}), "utf8");
       console.log(_.format("Standup %s! [channel: '%s']", (config.standup_ts_json ? "Updated" : "Sent"), config.channel));
     }
     else if (config.standup_ts_json) {
-      fs.unlinkSync(config.standup.replace(/\.txt$/, ".json"));
+      fs.unlinkSync(config.standup_ts_file);
       console.log(_.format("Standup Deleted! [channel: '%s']", config.channel));
     }
   }
