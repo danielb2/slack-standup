@@ -3,14 +3,17 @@ Installation
 
 Requirements:
 
-These are the `env`, file and directory requirements. Go to setup and follow those
+These are the environment variables, file and directory requirements. Go to setup and follow those
 steps to setup your system.
 
     1. ENV['HOME'] directory
-        a) this should already be set type: `env` to see your environment variables
+        a) this should already be set type: env to see your environment variables
 
     2. ENV['EDITOR'] or add to .slackrc.json as "editor". EX: "/usr/bin/vim"
-        a) `export EDITOR=“subl -w"` or `export EDITOR=“vim"`
+        a)  edit your shell's rc file - Ex: .bashrc
+            export EDITOR="subl -w"
+            ----- or ---- 
+            export EDITOR="vim"
 
     3. $HOME/.standup directory
         a) need to create
