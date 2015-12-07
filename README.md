@@ -71,7 +71,7 @@ Tips and tricks
         b) "// commented strings" are ignored for POST'ing but saved in the JSON
 
     3. Today to Yesterday:
-        a) When used daily, Today's lists are automattically appended to Yesterday's list
+        a) When used daily, Today's lists are automatically appended to Yesterday's list
 
     4. Update Standup:
         a) Re-run, edit and save; it will update the post with the new data
