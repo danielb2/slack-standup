@@ -39,7 +39,7 @@ Go here, scroll to the bottom and create OAuth token:
 https://api.slack.com/web
 
     $ cd
-    $ mkdir .startup
+    $ mkdir .standup
     $ vim .slackrc.json
       {
           "slack_token": "xxxx-DDDDDDDDDD-DDDDDDDDDDD-DDDDDDDDDDD-yyyyyyyyyy",
