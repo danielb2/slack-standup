@@ -1,3 +1,10 @@
+Latest Version
+--------------
+
+__NOTE__: I changed the file extension from .txt to .json. So all of your older files won't be found.
+To fix just run `npm run-script rename` and the .txt files will be renamed to .json files.
+
+
 Installation
 ------------
 

@@ -1,3 +1,5 @@
+"use strict"
+
 var fs = require("fs");
 var util = require("util");
 var config = require("./lib/config.js"); // blocking lib
@@ -52,26 +54,26 @@ if (config.prev_standup) {
     prev_json.live = config.standup_json ? true : false;
 
     // create new standup file using JSON5 to unquote keys
-    fs.writeFileSync(config.standup, JSON5.stringify(prev_json, null, 2) + "\n\n// vi:syntax=javascript", "utf8");
+    fs.writeFileSync(config.standup_file, JSON5.stringify(prev_json, null, 2), "utf8");
   }
 }
 else {
   // create one from scratch and open it
-  fs.writeFileSync(config.standup, JSON5.stringify(blank_standup, null, 2) + "\n\n// vi:syntax=javascript", "utf8");
+  fs.writeFileSync(config.standup_file, JSON5.stringify(blank_standup, null, 2), "utf8");
 }
 
 // launch editor
-var editor = _.exec(config.editor, [].concat(config.editor_args, config.standup), {stdio: "inherit"});
+var editor = _.exec(config.editor, [].concat(config.editor_args, config.standup_file), {stdio: "inherit"});
 
 // failed to launch editor
 if (editor.status !== 0) {
   // if not ok - exit (gives user feed back on parse errors)
-  console.log(_.format("Error: trying to launch editor: `%s %s %s`", config.editor, config.editor_args.join(" "), config.standup));
+  console.log(_.format("Error: trying to launch editor: `%s %s %s`", config.editor, config.editor_args.join(" "), config.standup_file));
   process.exit(1);
 }
 
 // parse standup file
-var standup = fs.readFileSync(config.standup, {encoding: "utf8"});
+var standup = fs.readFileSync(config.standup_file, {encoding: "utf8"});
 var standup_json = {};
 try {
   standup_json = JSON5.parse(standup);
