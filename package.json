@@ -1,6 +1,6 @@
 {
-  "name": "slack-statup",
-  "version": "0.1.1",
+  "name": "slack-standup",
+  "version": "0.1.2",
   "description": "Slack standup script.",
   "main": "index.js",
   "scripts": {
@@ -13,5 +13,8 @@
   "dependencies": {
     "json5": "^0.4.0",
     "request": "^2.67.0"
+  },
+  "bin": {
+    "slack-standup": "index.js"
   }
 }

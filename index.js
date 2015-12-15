@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 "use strict"
 
 var fs = require("fs");
@@ -138,6 +139,13 @@ _.post(post_url, {form: new_standup}, function(err, resp, body) {
     else if (config.standup_ts_json) {
       fs.unlinkSync(config.standup_ts_file);
       console.log(_.format("Standup Deleted! [channel: '%s']", config.channel));
+    }
+  }
+  else {
+    if (response_json.error === 'message_not_found') {
+      fs.unlinkSync(config.standup_ts_file);
+      console.log("Standup Not Send! Note: the original messge was probably deleted manually. Re-run and try again.");
+      process.exit(2);
     }
   }
 });
