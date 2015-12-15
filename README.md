@@ -1,5 +1,13 @@
-Latest Version
---------------
+Version 0.1.2
+-------------
+
+__NOTE__: @daniel suggested a few updates to install package globally.
+Now you can install via npm:
+`npm pack`
+`npm install <pkgname> -g`
+
+Version 0.1.1
+-------------
 
 __NOTE__: I changed the file extension from .txt to .json. So all of your older files won't be found.
 To fix just run `npm run-script rename` and the .txt files will be renamed to .json files.
