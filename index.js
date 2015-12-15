@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 'use strict';
 
-var Config = require('./lib/config.js'); // blocking lib
-var Fs = require('fs');
-var Json5 = require('json5');
-var Util = require('util');
+const Config = require('./lib/config.js'); // blocking lib
+const Fs = require('fs');
+const Json5 = require('json5');
+const Util = require('util');
 
 // clean healpers
 //
-var _ = {
+const _ = {
     extend: Util._extend,
     format: Util.format,
     exec: require('child_process').spawnSync,
@@ -16,7 +16,7 @@ var _ = {
 };
 
 // attachments object with specific sections and colors (mod your colors here)
-var attachments = {
+const attachments = {
     attachments: [
         { fallback: 'Breakfast', color: '#000000', fields: [{ title: 'Breakfast', value: '' }] },
         { fallback: 'Yesterday', color: '#F37321', fields: [{ title: 'Yesterday', value: '' }] },
@@ -27,7 +27,7 @@ var attachments = {
 };
 
 // blank standup file for first time ...
-var blank_standup = {
+const blank_standup = {
     live: false,
     text: ['*Status Update*'],
     breakfast: ['* '],
@@ -43,10 +43,10 @@ if (Config.prev_standup) {
     //
     if (!Config.prev_today) {
         // open - move things around - add syntax format update config
-        var prev_standup = Fs.readFileSync(Config.prev_standup, { encoding: 'utf8' });
+        const prev_standup = Fs.readFileSync(Config.prev_standup, { encoding: 'utf8' });
 
         // TODO: try/catch ... fails use blank ?? (shouldn't fail)
-        var prev_json = Json5.parse(prev_standup);
+        const prev_json = Json5.parse(prev_standup);
 
         // add Today to Yesterday ~ ?? more parsing
         prev_json.yesterday = [].concat(prev_json.yesterday, '// -----', prev_json.today);
@@ -64,7 +64,7 @@ else {
 }
 
 // launch editor
-var editor = _.exec(Config.editor, [].concat(Config.editor_args, Config.standup_file), { stdio: 'inherit' });
+const editor = _.exec(Config.editor, [].concat(Config.editor_args, Config.standup_file), { stdio: 'inherit' });
 
 // failed to launch editor
 if (editor.status !== 0) {
@@ -74,7 +74,7 @@ if (editor.status !== 0) {
 }
 
 // parse standup file
-var standup = Fs.readFileSync(Config.standup_file, { encoding: 'utf8' });
+const standup = Fs.readFileSync(Config.standup_file, { encoding: 'utf8' });
 var standup_json = {};
 try {
     standup_json = Json5.parse(standup);
@@ -86,12 +86,12 @@ catch (e) {
 }
 
 // fix values ... make object for postMessage
-var new_standup = _.extend({ channel: Config.channel, as_user: Config.user, text: standup_json.text.join('\n') }, attachments);
+const new_standup = _.extend({ channel: Config.channel, as_user: Config.user, text: standup_json.text.join('\n') }, attachments);
 
 // properties
 ['breakfast', 'yesterday', 'today', 'jira', 'blockers'].forEach(function (prop, index) {
     // remove commented values
-    var values = standup_json[prop]
+    const values = standup_json[prop]
     .filter(function (v) {
 
         return !(/^(?:#[#-]|\/\/|\/[*])/.test(v));
@@ -133,7 +133,7 @@ else {
 // do it
 _.post(post_url, { form: new_standup }, function (err, resp, body) {
 
-    var response_json = JSON.parse(body);
+    const response_json = JSON.parse(body);
     if (response_json.ok) {
         if (standup_json.live) {
             Fs.writeFileSync(Config.standup_ts_file, JSON.stringify({ ts: response_json.ts, channel: response_json.channel }), 'utf8');
