@@ -3,8 +3,10 @@ Version 0.1.2
 
 __NOTE__: @daniel suggested a few updates to install package globally.
 Now you can install via npm:
-`npm pack`
-`npm install <pkgname> -g`
+```
+npm pack
+npm install <pkgname> -g
+```
 
 Version 0.1.1
 -------------
