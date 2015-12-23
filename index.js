@@ -176,6 +176,13 @@ internals.main = function () {
                 console.log(internals.format('Standup Deleted! [channel: \'%s\']', Config.channel));
             }
         }
+        else {
+            if (response_json.error === 'message_not_found') {
+                fs.unlinkSync(config.standup_ts_file);
+                console.log('Standup Not Send! Note: the original messge was probably deleted manually. Re-run and try again.');
+                process.exit(2);
+            }
+        }
     });
 };
 

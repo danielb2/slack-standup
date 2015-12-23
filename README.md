@@ -1,5 +1,30 @@
-Latest Version
---------------
+Version 1.0.0
+-------------
+
+__NOTE__: slack-standup now follows [XDG directory
+specification](http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html)
+
+If you're migrating from a previous version:
+```
+mkdir -p $HOME/.config/slack-standup
+mv $HOME/.slackrc.json $HOME/.config/slack-standup/slackrc.json
+mv $HOME/.standup/* $HOME/.config/slack-standup/
+rm -rf $HOME/.standup/
+```
+
+
+Version 0.1.2
+-------------
+
+__NOTE__: @dbretoi suggested a few updates to install package globally.
+Now you can install via npm:
+```
+npm pack
+npm install <pkgname> -g
+```
+
+Version 0.1.1
+-------------
 
 __NOTE__: I changed the file extension from .txt to .json. So all of your older files won't be found.
 To fix just run `npm run-script rename` and the .txt files will be renamed to .json files.
