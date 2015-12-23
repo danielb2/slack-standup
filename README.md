@@ -44,7 +44,7 @@ steps to setup your system.
             ----- or ----
             export EDITOR="vim"
 
-    2. $HOME/.config/slack-standup/.slackrc.json file - has to be valid JSON
+    2. $HOME/.config/slack-standup/slackrc.json file - has to be valid JSON
         a) need to create
 
     3. Sublime Editor
