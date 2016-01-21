@@ -142,7 +142,7 @@ internals.makeNewStandup = function (standup_json) {
 
 internals.postURL = function (standup_json) {
 
-    var postURL = 'https://slack.com/api/chat.postMessage?token=' + Config.slack_token;
+    let postURL = 'https://slack.com/api/chat.postMessage?token=' + Config.slack_token;
     if (Config.standup_ts_json && standup_json.live) {
         postURL = postURL.replace(/postMessage/, 'update');
     }
@@ -162,7 +162,12 @@ internals.main = function () {
     const new_standup = internals.makeNewStandup(standup_json);
     const postURL = internals.postURL(standup_json);
 
-    internals.post(postURL, { form: new_standup }, function (err, resp, body) {
+    internals.post(postURL, { form: new_standup }, (err, resp, body) => {
+
+        if (err) {
+            console.log(err);
+            process.exit(1);
+        }
 
         const response_json = JSON.parse(body);
         if (response_json.ok) {
