@@ -9,6 +9,11 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "cmanion@walmartlabs.com",
+  "contributors": [{
+    "name": "Daniel Bretoi",
+    "email": "daniel@bretoi.com",
+    "url": "https://github.com/danielb2/"
+  }],
   "license": "ISC",
   "dependencies": {
     "json5": "^0.4.0",
