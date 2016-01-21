@@ -1,10 +1,9 @@
 {
   "name": "slack-standup",
   "version": "1.0.0",
-  "description": "Slack standup script.",
+  "description": "Slack standup script. Uses nice formatting to post a daily status to a slack channel.",
   "main": "index.js",
   "scripts": {
-    "run": "node index.js",
     "rename": "find ~/.standup -depth -type f -name \"*.txt\" -exec sh -c 'mv \"$1\" \"${1%.txt}.json\"' _ {} \\;",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
