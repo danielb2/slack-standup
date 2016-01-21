@@ -4,6 +4,10 @@ Version 1.0.0
 __NOTE__: slack-standup follows [XDG directory
 specification](http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html)
 
+Slack standup is a script to make a daily status report easy using slack. When
+the whole team uses this, it gives a nice overview of what everyone is working
+on without taking time to actually do it in person which many find disruptive.
+
 
 Installation
 ------------
