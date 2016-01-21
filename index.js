@@ -1,26 +1,29 @@
 #!/usr/bin/env node
 'use strict';
 
-const Config = require('./lib/config.js'); // blocking lib
 const Fs = require('fs');
 const Json5 = require('json5');
 const Util = require('util');
 
+const Config = require('./lib/config.js'); // blocking lib
 
 // Declare internals
 
 const internals = {
+    colors: [
+        '000000', 'cc6666',
+        '33cc66', 'cc9933',
+        '3366cc', 'cc33cc',
+        '33cccc', 'cccccc',
+        '666666', 'ff6666',
+        '66ff66', 'ffff66',
+        '6699ff', 'ff66ff',
+        '33ffff'
+    ],
     extend: Util._extend,
     format: Util.format,
     exec: require('child_process').spawnSync,
-    post: require('request').post,
-    attachments: [
-        { fallback: 'Breakfast', color: '#000000', fields: [{ title: 'Breakfast', value: '' }] },
-        { fallback: 'Previous', color: '#F37321', fields: [{ title: 'Previous', value: '' }] },
-        { fallback: 'Today',     color: '#57BA47', fields: [{ title: 'Today',     value: '' }] },
-        { fallback: 'Issues',      color: '#005593', fields: [{ title: 'Issues',      value: '' }] },
-        { fallback: 'Blockers',  color: '#CC0000', fields: [{ title: 'Blockers',  value: '' }] }
-    ]
+    post: require('request').post
 };
 
 
@@ -95,13 +98,23 @@ internals.makeNewStandup = function (standup_json) {
         channel: Config.channel,
         as_user: Config.user,
         text: standup_json.text.join('\n'),
-        attachments: internals.attachments
+        attachments: []
     };
 
-    // properties
-    ['breakfast', 'previous', 'today', 'issues', 'blockers'].forEach((prop, index) => {
-        // remove commented values
-        const values = standup_json[prop].filter((value) => {
+    const keys = Object.keys(standup_json).filter((item) => {
+
+        if (item === 'text' || item === 'live') {
+            return false;
+        }
+        return true;
+    });
+
+
+    for (let i = 0; i < keys.length; ++i) {
+        const key = keys[i];
+        const title = key.charAt(0).toUpperCase() + key.slice(1,key.length).toLowerCase();
+
+        const values = standup_json[key].filter((value) => {
 
             return !(/^(?:#[#-]|\/\/|\/[*])/.test(value));
         })
@@ -113,9 +126,17 @@ internals.makeNewStandup = function (standup_json) {
             .replace(/^[#][ .]/, internals.format('%s. ', (idx + 1))) // numbers
             ;
         });
-        // use commas for the first and line-ends for the rest
-        new_standup.attachments[index].fields[0].value = values.join(index ? '\n' : ', ');
-    });
+
+
+        const color = internals.colors[i % internals.colors.length];
+        const section = {
+            fallback: title,
+            color: '#' + color,
+            fields: [{ title: title,  value: values.join(i ? '\n' : ', ') }]
+        };
+
+        new_standup.attachments.push(section);
+    }
 
     // WTF ~ this took me awhile to figure out and then remember (later)!! Need to abstract this!!
     new_standup.attachments = JSON.stringify(new_standup.attachments);
@@ -142,7 +163,7 @@ internals.makeNewStandup = function (standup_json) {
 
 internals.postURL = function (standup_json) {
 
-    var postURL = 'https://slack.com/api/chat.postMessage?token=' + Config.slack_token;
+    let postURL = 'https://slack.com/api/chat.postMessage?token=' + Config.slack_token;
     if (Config.standup_ts_json && standup_json.live) {
         postURL = postURL.replace(/postMessage/, 'update');
     }
@@ -162,7 +183,12 @@ internals.main = function () {
     const new_standup = internals.makeNewStandup(standup_json);
     const postURL = internals.postURL(standup_json);
 
-    internals.post(postURL, { form: new_standup }, function (err, resp, body) {
+    internals.post(postURL, { form: new_standup }, (err, resp, body) => {
+
+        if (err) {
+            console.log(err);
+            process.exit(1);
+        }
 
         const response_json = JSON.parse(body);
         if (response_json.ok) {
@@ -177,8 +203,8 @@ internals.main = function () {
         }
         else {
             if (response_json.error === 'message_not_found') {
-                fs.unlinkSync(config.standup_ts_file);
-                console.log('Standup Not Send! Note: the original messge was probably deleted manually. Re-run and try again.');
+                Fs.unlinkSync(Config.standup_ts_file);
+                console.log('Standup not sent! Note: the original messge was probably deleted manually. Re-run and try again.');
                 process.exit(2);
             }
         }
