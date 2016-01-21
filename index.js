@@ -9,7 +9,7 @@ const Util = require('util');
 
 // Declare internals
 
-var internals = {
+const internals = {
     extend: Util._extend,
     format: Util.format,
     exec: require('child_process').spawnSync,
@@ -51,11 +51,11 @@ internals.initStandupFile = function () {
             prev_json.live = Config.standup_json ? true : false;
 
             // create new standup file using JSON5 to unquote keys
-            Fs.writeFileSync(Config.standup_file, Json5.stringify(prev_json, null, 2), 'utf8');
+            Fs.writeFileSync(Config.standup_file, JSON.stringify(prev_json, null, 2), 'utf8');
         }
     }
     else {
-        Fs.writeFileSync(Config.standup_file, Json5.stringify(blank_standup, null, 2), 'utf8');
+        Fs.writeFileSync(Config.standup_file, JSON.stringify(blank_standup, null, 2), 'utf8');
     }
 };
 
@@ -75,7 +75,7 @@ internals.getStandupData = function () {
 
     // parse standup file
     const standup = Fs.readFileSync(Config.standup_file, { encoding: 'utf8' });
-    var standup_json = {};
+    let standup_json = {};
     try {
         standup_json = Json5.parse(standup);
     }
