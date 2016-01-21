@@ -16,9 +16,9 @@ const internals = {
     post: require('request').post,
     attachments: [
         { fallback: 'Breakfast', color: '#000000', fields: [{ title: 'Breakfast', value: '' }] },
-        { fallback: 'Yesterday', color: '#F37321', fields: [{ title: 'Yesterday', value: '' }] },
+        { fallback: 'Previous', color: '#F37321', fields: [{ title: 'Previous', value: '' }] },
         { fallback: 'Today',     color: '#57BA47', fields: [{ title: 'Today',     value: '' }] },
-        { fallback: 'JIRA',      color: '#005593', fields: [{ title: 'JIRA',      value: '' }] },
+        { fallback: 'Issues',      color: '#005593', fields: [{ title: 'Issues',      value: '' }] },
         { fallback: 'Blockers',  color: '#CC0000', fields: [{ title: 'Blockers',  value: '' }] }
     ]
 };
@@ -31,9 +31,9 @@ internals.initStandupFile = function () {
         live: false,
         text: ['*Status Update*'],
         breakfast: ['* '],
-        yesterday: ['* ', '* '],
+        previous: ['* ', '* '],
         today: ['* ', '* '],
-        jira: ['* <https://jira.walmart.com/browse/SASCUI-1|SASCUI-1> Header'],
+        issues: ['* <https://github.com/danielb2/purdy.js/issues/22|purdy-cli> Purdy Issue'],
         blockers: ['* None, on track']
     };
 
@@ -44,8 +44,8 @@ internals.initStandupFile = function () {
             // TODO: try/catch ... fails use blank ?? (shouldn't fail)
             const prev_json = Json5.parse(prev_standup);
 
-            // add Today to Yesterday ~ ?? more parsing
-            prev_json.yesterday = [].concat(prev_json.yesterday, '// -----', prev_json.today);
+            // add Today to Previous ~ ?? more parsing
+            prev_json.previous = [].concat(prev_json.previous, '// -----', prev_json.today);
 
             // default to false unless already posted
             prev_json.live = Config.standup_json ? true : false;
@@ -91,7 +91,7 @@ internals.getStandupData = function () {
 
 internals.makeNewStandup = function (standup_json) {
 
-    var new_standup = {
+    let new_standup = {
         channel: Config.channel,
         as_user: Config.user,
         text: standup_json.text.join('\n'),
@@ -99,16 +99,15 @@ internals.makeNewStandup = function (standup_json) {
     };
 
     // properties
-    ['breakfast', 'yesterday', 'today', 'jira', 'blockers'].forEach(function (prop, index) {
+    ['breakfast', 'previous', 'today', 'issues', 'blockers'].forEach((prop, index) => {
         // remove commented values
-        const values = standup_json[prop]
-        .filter(function (v) {
+        const values = standup_json[prop].filter((value) => {
 
-            return !(/^(?:#[#-]|\/\/|\/[*])/.test(v));
+            return !(/^(?:#[#-]|\/\/|\/[*])/.test(value));
         })
-        .map(function (v, idx) {
+        .map((value, idx) => {
 
-            return v
+            return value
             .replace(/^[*][ ]/, '\u2022 ') // bullets
             .replace(/^[-][ -]/, '\u2013 ') // en-dash
             .replace(/^[#][ .]/, internals.format('%s. ', (idx + 1))) // numbers
