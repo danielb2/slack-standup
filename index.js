@@ -32,7 +32,7 @@ internals.initStandupFile = function () {
     // blank standup file for first time ...
     const blank_standup = {
         live: false,
-        text: ['*Status Update*'],
+        text: '*Status Update*',
         breakfast: ['* '],
         previous: ['* ', '* '],
         today: ['* ', '* '],
@@ -97,7 +97,7 @@ internals.makeNewStandup = function (standup_json) {
     let new_standup = {
         channel: Config.channel,
         as_user: Config.user,
-        text: standup_json.text.join('\n'),
+        text: [].concat(standup_json.text).join('\n'),
         attachments: []
     };
 
@@ -113,6 +113,8 @@ internals.makeNewStandup = function (standup_json) {
     for (let i = 0; i < keys.length; ++i) {
         const key = keys[i];
         const title = key.charAt(0).toUpperCase() + key.slice(1,key.length).toLowerCase();
+
+        standup_json[key] = [].concat(standup_json[key]);
 
         const values = standup_json[key].filter((value) => {
 
@@ -194,6 +196,7 @@ internals.main = function () {
         if (response_json.ok) {
             if (standup_json.live) {
                 Fs.writeFileSync(Config.standup_ts_file, JSON.stringify({ ts: response_json.ts, channel: response_json.channel }), 'utf8');
+                Fs.writeFileSync(Config.standup_file, JSON.stringify(standup_json, null, 2), 'utf8');
                 console.log(internals.format('Standup %s! [channel: \'%s\']', (Config.standup_ts_json ? 'Updated' : 'Sent'), Config.channel));
             }
             else if (Config.standup_ts_json) {
