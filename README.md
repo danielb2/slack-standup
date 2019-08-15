@@ -9,6 +9,10 @@ the whole team uses this, it gives a nice overview of what everyone is working
 on without taking time to actually do it in person which many find disruptive.
 
 
+Author
+------
+* https://github.com/caseman72
+
 Installation
 ------------
 
