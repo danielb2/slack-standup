@@ -193,6 +193,11 @@ internals.main = function () {
         }
 
         const response_json = JSON.parse(body);
+
+        if (!response_json.ok) {
+            console.log(body);
+        }
+
         if (response_json.ok) {
             if (standup_json.live) {
                 Fs.writeFileSync(Config.standup_ts_file, JSON.stringify({ ts: response_json.ts, channel: response_json.channel }), 'utf8');

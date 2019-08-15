@@ -43,6 +43,8 @@ Setup:
 Go here, scroll to the bottom and create OAuth token:
 https://api.slack.com/web
 
+OR use: https://api.slack.com/custom-integrations/legacy-tokens
+
     $ cd
     $ mkdir ~/.config/slack-standup
     $ vim ~/.config/slack-standup/slackrc.json
