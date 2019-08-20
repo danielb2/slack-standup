@@ -1,92 +1,70 @@
-Version 1.0.0
--------------
-
-__NOTE__: slack-standup follows [XDG directory
-specification](http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html)
+Slack Standup
+==============
 
 Slack standup is a script to make a daily status report easy using slack. When
 the whole team uses this, it gives a nice overview of what everyone is working
 on without taking time to actually do it in person which many find disruptive.
 
+Version 2.0.0
+-------------
 
-Author
-------
-* https://github.com/caseman72
+__NOTE__: slack-standup follows [XDG directory
+specification](http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html)
+
 
 Installation
 ------------
 
-Requirements:
+1. `npm install slack-standup -g`
 
-These are the environment variables, file and directory requirements. Go to setup and follow those
-steps to setup your system.
+1. Go to https://api.slack.com/custom-integrations/legacy-tokens to create your slack token for use. (_NOTE_: patch is welcome for the new oauth)
 
-    1. ENV['EDITOR'] or add to slackrc.json as "editor". EX: "/usr/bin/vim"
-        a) edit your shell's rc file - Ex: .bashrc
-            export EDITOR="subl -w"
-            ----- or ----
-            export EDITOR="vim"
+1. create
+`$HOME/.config/slack-standup/slackrc.yaml` or
+`$HOME/.config/slack-standup/slackrc.json` depending on your preference.
 
-    2. $HOME/.config/slack-standup/slackrc.json file - has to be valid JSON
-        a) need to create
+    * properties:
+        - `slack_token` - slack token from above
+        - `channel` - channel you wish the post to go to
+        - `user` - slack user to post as (default: env USER)
+        - `editor` - editor to use to post (default: env EDITOR)
 
-    3. Sublime Editor
-        a) Must use the -w (--wait) option with the editor (see above #1)
-        b) If you don't want to change your EDITOR env value you can add it
-           to your .slackrc.json file as "editor": "subl -w"
+    example `slackrc.yaml`:
+    ``` yaml
+    slack_token: xoxp-9152601...
+    channel: "#blah"
+    user: daniel
+    editor: nvim # or code -w ... etc
+    ```
 
-    4. TMUX Sessions
-        a) If you use tmux and sublime (or atom) you need to reattach the editor
-           process to the user. Do this:
+1. Sublime / VS Code Editor
+    * Note you must use the -w (--wait) option with the editor.
 
-            brew install reattach-to-user-namespace
-
-
-Setup:
-
-Go here, scroll to the bottom and create OAuth token:
-https://api.slack.com/web
-
-OR use: https://api.slack.com/custom-integrations/legacy-tokens
-
-    $ cd
-    $ mkdir ~/.config/slack-standup
-    $ vim ~/.config/slack-standup/slackrc.json
-      {
-          "slack_token": "xxxx-DDDDDDDDDD-DDDDDDDDDDD-DDDDDDDDDDD-yyyyyyyyyy",
-          "standup": {
-                  "channel": "#bot-channel",
-                  "user": "Display Name"
-          }
-      }
-    $ cd /path/to/slack-standup
-    $ npm install
-    $ node index.js
-
-
-Usage:
-
-    $ node index.js
-
+2. TMUX Sessions
+   * If you use tmux and sublime (or atom) you need to reattach the editor, you may have to install reattach-to-user-namespace. On newer versions of tmux, this shouldn't be necessary.
 
 Tips and tricks
 ---------------
 
-    1. Automatic Conversions:
-        a) Stars (*) at the start of lines are converted to bullets
-        b) Hash (#) at the start of the lines are converted to numbered lists
-        c) Dash (-) at the start of lines are converted to endash
+1. Automatic Conversions:
+    * Stars (*) at the start of lines are converted to bullets
+    * Hash (#) at the start of the lines are converted to numbered lists
+    * Dash (-) at the start of lines are converted to endash
 
-    2. Comments in standup JSON file:
-        a) // commented lines are ignored and not ported to the next day
-        b) "// commented strings" are ignored for POST'ing but saved in the JSON
+1. Comments in standup JSON file:
+    * // commented lines are ignored and not ported to the next day
+    * "// commented strings" are ignored for POST'ing but saved in the JSON
 
-    3. Today to Yesterday:
-        a) When used daily, Today's lists are automatically appended to Yesterday's list
+1. Today to Yesterday:
+    * When used daily, Today's lists are automatically appended to Yesterday's list. It will check posts for 7 days
 
-    4. Update Standup:
-        a) Re-run, edit and save; it will update the post with the new data
+1. Update Standup:
+    * Re-run, edit and save; it will update the post with the new data
 
-    5. Delete Standup:
-        a) You can do it via the application or
-        b) Re-run, change 'live' to false and quit; it will remove the post
+1. Delete Standup:
+    * You can do it via the application or
+    * Re-run, change 'live' to false and quit; it will remove the post
+
+Original Author
+------
+* https://github.com/caseman72
