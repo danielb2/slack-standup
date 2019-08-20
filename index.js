@@ -106,6 +106,7 @@ internals.makeNewStandup = function (standup_json) {
         if (item === 'text' || item === 'live') {
             return false;
         }
+
         return true;
     });
 
@@ -120,21 +121,21 @@ internals.makeNewStandup = function (standup_json) {
 
             return !(/^(?:#[#-]|\/\/|\/[*])/.test(value));
         })
-        .map((value, idx) => {
+            .map((value, idx) => {
 
-            return value
-            .replace(/^[*][ ]/, '\u2022 ') // bullets
-            .replace(/^[-][ -]/, '\u2013 ') // en-dash
-            .replace(/^[#][ .]/, internals.format('%s. ', (idx + 1))) // numbers
-            ;
-        });
+                return value
+                    .replace(/^[*][ ]/, '\u2022 ') // bullets
+                    .replace(/^[-][ -]/, '\u2013 ') // en-dash
+                    .replace(/^[#][ .]/, internals.format('%s. ', (idx + 1))) // numbers
+                ;
+            });
 
 
         const color = internals.colors[i % internals.colors.length];
         const section = {
             fallback: title,
             color: '#' + color,
-            fields: [{ title: title,  value: values.join(i ? '\n' : ', ') }]
+            fields: [{ title,  value: values.join(i ? '\n' : ', ') }]
         };
 
         new_standup.attachments.push(section);
@@ -169,6 +170,7 @@ internals.postURL = function (standup_json) {
     if (Config.standup_ts_json && standup_json.live) {
         postURL = postURL.replace(/postMessage/, 'update');
     }
+
     if (Config.standup_ts_json && !standup_json.live) {
         postURL = postURL.replace(/postMessage/, 'delete');
     }
