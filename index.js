@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 
-const Fs = require('fs');
-const Json5 = require('json5');
+const File = require('./lib/file');
 const Util = require('util');
 
 const Config = require('./lib/config.js'); // blocking lib
@@ -42,10 +41,7 @@ internals.initStandupFile = function () {
 
     if (Config.prev_standup) {
         if (!Config.prev_today) {
-            const prev_standup = Fs.readFileSync(Config.prev_standup, { encoding: 'utf8' });
-
-            // TODO: try/catch ... fails use blank ?? (shouldn't fail)
-            const prev_json = Json5.parse(prev_standup);
+            const prev_json = File.read(Config.prev_standup);
 
             // add Today to Previous ~ ?? more parsing
             prev_json.previous = [].concat(prev_json.previous, '// -----', prev_json.today);
@@ -54,18 +50,21 @@ internals.initStandupFile = function () {
             prev_json.live = Config.standup_json ? true : false;
 
             // create new standup file using JSON5 to unquote keys
-            Fs.writeFileSync(Config.standup_file, JSON.stringify(prev_json, null, 2), 'utf8');
+            File.write(Config.standup_file, prev_json);
         }
     }
     else {
-        Fs.writeFileSync(Config.standup_file, JSON.stringify(blank_standup, null, 2), 'utf8');
+        File.write(Config.standup_file, blank_standup);
     }
 };
 
 
 internals.launchEditor = function () {
 
-    const editor = internals.exec(Config.editor, [].concat(Config.editor_args, Config.standup_file), { stdio: 'inherit' });
+    const editor = internals.exec(
+        Config.editor,
+        [].concat(Config.editor_args, File.filePath(Config.standup_file)), { stdio: 'inherit' }
+    );
 
     if (editor.status !== 0) {
         console.log(internals.format('Error: trying to launch editor: `%s %s %s`', Config.editor, Config.editor_args.join(' '), Config.standup_file));
@@ -77,16 +76,7 @@ internals.launchEditor = function () {
 internals.getStandupData = function () {
 
     // parse standup file
-    const standup = Fs.readFileSync(Config.standup_file, { encoding: 'utf8' });
-    let standup_json = {};
-    try {
-        standup_json = Json5.parse(standup);
-    }
-    catch (e) {
-        // if not ok - exit (gives user feed back on parse errors)
-        console.log(internals.format('Error# parsing standup file :%s', e.message).replace(/:/, '\'').replace(/:/, '\'').replace(/#/, ':'));
-        process.exit(1);
-    }
+    const standup_json = File.read(Config.standup_file);
 
     return standup_json;
 };
@@ -202,18 +192,18 @@ internals.main = function () {
 
         if (response_json.ok) {
             if (standup_json.live) {
-                Fs.writeFileSync(Config.standup_ts_file, JSON.stringify({ ts: response_json.ts, channel: response_json.channel }), 'utf8');
-                Fs.writeFileSync(Config.standup_file, JSON.stringify(standup_json, null, 2), 'utf8');
+                File.write(Config.standup_ts_file, { ts: response_json.ts, channel: response_json.channel });
+                File.write(Config.standup_file, standup_json, null);
                 console.log(internals.format('Standup %s! [channel: \'%s\']', (Config.standup_ts_json ? 'Updated' : 'Sent'), Config.channel));
             }
             else if (Config.standup_ts_json) {
-                Fs.unlinkSync(Config.standup_ts_file);
+                File.rm(Config.standup_ts_file);
                 console.log(internals.format('Standup Deleted! [channel: \'%s\']', Config.channel));
             }
         }
         else {
             if (response_json.error === 'message_not_found') {
-                Fs.unlinkSync(Config.standup_ts_file);
+                File.rm(Config.standup_ts_file);
                 console.log('Standup not sent! Note: the original messge was probably deleted manually. Re-run and try again.');
                 process.exit(2);
             }
