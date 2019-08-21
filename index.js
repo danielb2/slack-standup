@@ -33,8 +33,8 @@ internals.initStandupFile = function () {
         live: false,
         text: '*Status Update*',
         breakfast: ['* '],
-        previous: ['* ', '* '],
-        today: ['* ', '* '],
+        previous: ['* '],
+        today: ['* '],
         issues: ['* <https://github.com/danielb2/purdy.js/issues/22|purdy-cli> Purdy Issue'],
         blockers: ['* None, on track']
     };
