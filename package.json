@@ -1,6 +1,6 @@
 {
   "name": "slack-standup",
-  "version": "2.0.0-2",
+  "version": "2.0.0-3",
   "description": "Slack standup script. Uses nice formatting to post a daily status to a slack channel.",
   "main": "index.js",
   "scripts": {
