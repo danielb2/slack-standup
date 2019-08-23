@@ -10,14 +10,13 @@ const Config = require('./lib/config.js'); // blocking lib
 
 const internals = {
     colors: [
-        '000000', 'cc6666',
-        '33cc66', 'cc9933',
-        '3366cc', 'cc33cc',
-        '33cccc', 'cccccc',
-        '666666', 'ff6666',
-        '66ff66', 'ffff66',
-        '6699ff', 'ff66ff',
-        '33ffff'
+        'FF0000', // red
+        'FF7F00', // orange
+        'FFFF00', // yellow
+        '00FF00', // green
+        '0000FF', // blue
+        '4B0082', // indigo
+        '9400D3'  // violet
     ],
     extend: Util._extend,
     format: Util.format,
@@ -67,7 +66,7 @@ internals.launchEditor = function () {
     );
 
     if (editor.status !== 0) {
-        console.log(internals.format('Error: trying to launch editor: `%s %s %s`', Config.editor, Config.editor_args.join(' '), Config.standup_file));
+        console.log(`Error: trying to launch editor: ${Config.editor} ${Config.editor_args.join(' ')} ${Config.standup_file}`);
         process.exit(1);
     }
 };
@@ -110,22 +109,20 @@ internals.makeNewStandup = function (standup_json) {
         const values = standup_json[key].filter((value) => {
 
             return !(/^(?:#[#-]|\/\/|\/[*])/.test(value));
-        })
-            .map((value, idx) => {
+        }).map((value, idx) => {
 
-                return value
-                    .replace(/^[*][ ]/, '\u2022 ') // bullets
-                    .replace(/^[-][ -]/, '\u2013 ') // en-dash
-                    .replace(/^[#][ .]/, internals.format('%s. ', (idx + 1))) // numbers
-                ;
-            });
+            return value
+                .replace(/^[*][ ]/, '\u2022 ') // bullets
+                .replace(/^[-][ -]/, '\u2013 ') // en-dash
+                .replace(/^[#][ .]/, `${idx + 1}. `); // numbers
+        });
 
 
         const color = internals.colors[i % internals.colors.length];
         const section = {
             fallback: title,
             color: '#' + color,
-            fields: [{ title,  value: values.join(i ? '\n' : ', ') }]
+            fields: [{ title,  value: values.join('\n') }]
         };
 
         new_standup.attachments.push(section);
@@ -137,7 +134,7 @@ internals.makeNewStandup = function (standup_json) {
     // postMessage or update or delete
     if (Config.standup_ts_json) {
         if (standup_json.live) {
-            internals.extend(new_standup, Config.standup_ts_json);
+            Object.assign(new_standup, Config.standup_ts_json);
         }
         else {
             new_standup = Config.standup_ts_json;
@@ -191,15 +188,18 @@ internals.main = function () {
         }
 
         if (response_json.ok) {
+            let action = 'Sent';
             if (standup_json.live) {
                 File.write(Config.standup_ts_file, { ts: response_json.ts, channel: response_json.channel });
                 File.write(Config.standup_file, standup_json, null);
-                console.log(internals.format('Standup %s! [channel: \'%s\']', (Config.standup_ts_json ? 'Updated' : 'Sent'), Config.channel));
+                action = 'Updated';
             }
             else if (Config.standup_ts_json) {
                 File.rm(Config.standup_ts_file);
-                console.log(internals.format('Standup Deleted! [channel: \'%s\']', Config.channel));
+                action = 'Deleted';
             }
+
+            console.log(`Standup ${Config.standup_ts_json ? 'Updated' : 'Sent'}! [channel: \'${Config.channel}\']`);
         }
         else {
             if (response_json.error === 'message_not_found') {
