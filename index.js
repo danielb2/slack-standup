@@ -188,18 +188,18 @@ internals.main = function () {
         }
 
         if (response_json.ok) {
-            let action = 'Sent';
+            let action;
             if (standup_json.live) {
                 File.write(Config.standup_ts_file, { ts: response_json.ts, channel: response_json.channel });
                 File.write(Config.standup_file, standup_json, null);
-                action = 'Updated';
+                action = Config.standup_ts_json ? 'Updated' : 'Sent';
             }
-            else if (Config.standup_ts_json) {
+            else {
                 File.rm(Config.standup_ts_file);
                 action = 'Deleted';
             }
 
-            console.log(`Standup ${Config.standup_ts_json ? 'Updated' : 'Sent'}! [channel: \'${Config.channel}\']`);
+            console.log(`Standup ${action}! [channel: \'${Config.channel}\']`);
         }
         else {
             if (response_json.error === 'message_not_found') {
