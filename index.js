@@ -46,23 +46,29 @@ internals.initStandupFile = function () {
         }
     };
 
-    if (Config.prev_standup) {
-        if (!Config.prev_today) {
-            const prev_json = File.read(Config.prev_standup);
-
-            // add Today to Previous ~ ?? more parsing
-            prev_json.previous = [].concat(prev_json.previous, '// -----', prev_json.today);
-
-            // default to false unless already posted
-            prev_json.live = Config.standup_json ? true : false;
-
-            // create new standup file using JSON5 to unquote keys
-            File.write(Config.standup_file, prev_json);
-        }
+    if (process.argv[2]) {
+        blank_standup.thread = process.argv[2];
     }
-    else {
+
+    if (!Config.prev_standup) {
         File.write(Config.standup_file, blank_standup);
+        return;
     }
+
+    const prev = File.read(Config.prev_standup);
+    if (!Config.prev_today) {
+
+        // add Today to Previous ~ ?? more parsing
+        prev.previous = [].concat(prev.previous, '// -----', prev.today);
+
+        // default to false unless already posted
+        prev.live = Config.standup_json ? true : false;
+
+    }
+    if (process.argv[2]) {
+        prev.thread = process.argv[2];
+    }
+    File.write(Config.standup_file, prev);
 };
 
 
@@ -84,8 +90,6 @@ internals.makeNewStandup = function (standup) {
 
     let new_standup = {
         channel: standup.channel || Config.channel,
-        mrkdwn: true,
-        parse: 'full',
         ts: standup.ts,
         as_user: Config.user,
         text: [].concat(standup.text).join('\n'),
@@ -134,6 +138,15 @@ internals.makeNewStandup = function (standup) {
     if (!standup.live && !standup.ts) {
         console.log('Standup Not Sent! Note: the \'live\' property must be true.');
         process.exit();
+    }
+
+    if (standup.thread) {
+        let [channel, thread_ts] = standup.thread.split('/').splice(-2)
+        thread_ts = thread_ts.slice(1,99)
+        thread_ts = thread_ts.split('');
+        thread_ts.splice(-6,0,'.')
+        new_standup.channel = channel;
+        new_standup.thread_ts = thread_ts.join('');
     }
 
     return new_standup;
