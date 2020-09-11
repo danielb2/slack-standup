@@ -38,9 +38,9 @@ internals.initStandupFile = function () {
         text: '*Status Update*',
         body: {
             breakfast: 'cereal',
-            previous: '• some work\n• you did\n• yesterday',
+            previous: '* some work\n* you did\n* yesterday',
             today: '1. do something\n2. really\n3. well',
-            issues: '* [Purdy Issue](https://github.com/danielb2/purdy.js/issues/22)',
+            issues: '<https://github.com/danielb2/purdy.js/issues/22|Purdy Issue>',
             blockers: '* None, on track'
         }
     };
@@ -84,6 +84,19 @@ internals.launchEditor = function () {
     }
 };
 
+// converts lines beginning with * to bulleted list, and 1. to numerical list
+internals.formatValue = function(value) {
+
+    const arr = value.split('\n')
+    let idx = 0;
+    const res = arr.map((line) => {
+        ++idx;
+        line = line.replace(/^\d/, `${idx}`);
+        line = line.replace(/^\*/, `•`);
+        return line;
+    });
+    return res.join('\n');
+};
 
 internals.makeNewStandup = function (standup) {
 
@@ -105,7 +118,7 @@ internals.makeNewStandup = function (standup) {
             fallback: title,
             type: 'mrkdwn',
             color: '#' + color,
-            fields: [{ title,  value }]
+            fields: [{ title,  value: internals.formatValue(value) }]
         };
 
         new_standup.attachments.push(section);
