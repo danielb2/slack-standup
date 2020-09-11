@@ -57,8 +57,12 @@ internals.initStandupFile = function () {
     const prev = File.read(Config.prev_standup);
     if (!Config.prev_today) {
 
-        // add Today to Previous ~ ?? more parsing
-        prev.previous = [].concat(prev.previous, '// -----', prev.today);
+        try {
+            // add Today to Previous ~ ?? more parsing
+            prev.body.previous = prev.body.today
+        } catch (e) {
+            console.log('Missing key for previous day. Best to follow today/previous format.');
+        }
 
         // default to false unless already posted
         prev.live = Config.standup_json ? true : false;
@@ -67,6 +71,8 @@ internals.initStandupFile = function () {
     if (process.argv[2]) {
         prev.thread = process.argv[2];
     }
+
+
     File.write(Config.standup_file, prev);
 };
 
