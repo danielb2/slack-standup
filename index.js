@@ -148,15 +148,11 @@ internals.main = async function () {
     const standup = File.read(Config.standup_file);
     const new_standup = internals.makeNewStandup(standup);
 
-    console.log(new_standup);
-
     const method = (() => {
         if (standup.live && standup.ts) return 'update';
         if (standup.live) return 'postMessage';
         if (!standup.live) return 'delete';
     })();
-    console.log(method);
-
 
     let response;
     try {
@@ -185,42 +181,6 @@ internals.main = async function () {
 
     File.write(Config.standup_file, standup);
     console.log(`Standup ${internals.methodMap[method]}! [channel: \'${Config.channel}\']`);
-
-    // internals.post(postURL, { form: new_standup }, (err, resp, body) => {
-    //
-    //     if (err) {
-    //         console.log(err);
-    //         process.exit(1);
-    //     }
-    //
-    //     const response_json = JSON.parse(body);
-    //
-    //     if (!response_json.ok) {
-    //         console.log(body);
-    //     }
-    //
-    //     if (response_json.ok) {
-    //         let action;
-    //         if (standup_json.live) {
-    //             File.write(Config.standup_ts_file, { ts: response_json.ts, channel: response_json.channel });
-    //             File.write(Config.standup_file, standup_json, null);
-    //             action = Config.standup_ts_json ? 'Updated' : 'Sent';
-    //         }
-    //         else {
-    //             File.rm(Config.standup_ts_file);
-    //             action = 'Deleted';
-    //         }
-    //
-    //         console.log(`Standup ${action}! [channel: \'${Config.channel}\']`);
-    //     }
-    //     else {
-    //         if (response_json.error === 'message_not_found') {
-    //             File.rm(Config.standup_ts_file);
-    //             console.log('Standup not sent! Note: the original messge was probably deleted manually. Re-run and try again.');
-    //             process.exit(2);
-    //         }
-    //     }
-    // });
 };
 
 internals.main();
