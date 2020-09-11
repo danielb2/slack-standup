@@ -88,10 +88,10 @@ internals.launchEditor = function () {
 internals.formatValue = function(value) {
 
     const arr = value.split('\n')
-    let idx = 0;
+    let idx = 1;
     const res = arr.map((line) => {
-        ++idx;
-        line = line.replace(/^\d/, `${idx}`);
+        line = line.replace(/^\d\./, `${idx}.`);
+        if (line.match(/^\d\./)) idx++;
         line = line.replace(/^\*/, `•`);
         return line;
     });
@@ -108,7 +108,7 @@ internals.makeNewStandup = function (standup) {
         attachments: []
     };
 
-    let idx = 0;
+    let idx = -1;
     for (const [key, value] of Object.entries(standup.body)) {
         ++idx;
         const title = key.charAt(0).toUpperCase() + key.slice(1,key.length).toLowerCase();
