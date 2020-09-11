@@ -38,11 +38,10 @@ internals.initStandupFile = function () {
         text: '*Status Update*',
         body: {
             breakfast: 'cereal',
-            previous: 'some work you did yesterday',
+            previous: '• some work\n• you did\n• yesterday',
             today: '1. do something\n2. really\n3. well',
-            along: '<https://walmart.slack.com/archives/C5G525Q3U/p1599776004007200|can we>  see',
-            issues: ['* [Purdy Issue](https://github.com/danielb2/purdy.js/issues/22)'],
-            blockers: ['* None, on track']
+            issues: '* [Purdy Issue](https://github.com/danielb2/purdy.js/issues/22)',
+            blockers: '* None, on track'
         }
     };
 
@@ -96,40 +95,17 @@ internals.makeNewStandup = function (standup) {
         attachments: []
     };
 
-    const keys = Object.keys(standup.body).filter((item) => {
-
-        if (item === 'text' || item === 'live') {
-            return false;
-        }
-
-        return true;
-    });
-
-
-    for (let i = 0; i < keys.length; ++i) {
-        const key = keys[i];
+    let idx = 0;
+    for (const [key, value] of Object.entries(standup.body)) {
+        ++idx;
         const title = key.charAt(0).toUpperCase() + key.slice(1,key.length).toLowerCase();
 
-        standup.body[key] = [].concat(standup.body[key]);
-
-        const values = standup.body[key].filter((value) => {
-
-            return !(/^(?:#[#-]|\/\/|\/[*])/.test(value));
-        }).map((value, idx) => {
-
-            return value
-                .replace(/^[*][ ]/, '\u2022 ') // bullets
-                .replace(/^[-][ -]/, '\u2013 ') // en-dash
-                .replace(/^[#][ .]/, `${idx + 1}. `); // numbers
-        });
-
-
-        const color = internals.colors[i % internals.colors.length];
+        const color = internals.colors[idx % internals.colors.length];
         const section = {
             fallback: title,
             type: 'mrkdwn',
             color: '#' + color,
-            fields: [{ title,  value: values.join('\n') }]
+            fields: [{ title,  value }]
         };
 
         new_standup.attachments.push(section);
