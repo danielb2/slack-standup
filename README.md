@@ -37,7 +37,7 @@ Installation
     editor: nvim # or code -w ... etc
     ```
 
-1. Sublime / VS Code Editor
+1. Sublime and VS Code Editor
     * Note you must use the -w (--wait) option with the editor.
 
 2. TMUX Sessions
