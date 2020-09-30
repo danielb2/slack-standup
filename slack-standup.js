@@ -57,6 +57,7 @@ internals.initStandupFile = function () {
     const prev = File.read(Config.prev_standup);
     if (!Config.prev_today) {
 
+        delete prev.ts; // dont confuse old timestamp with new day
         try {
             // add Today to Previous ~ ?? more parsing
             prev.body.previous = prev.body.today
