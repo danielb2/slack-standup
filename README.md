@@ -10,6 +10,7 @@ on without taking time to actually do it in person which many find disruptive.
 
 <!-- vim-markdown-toc GFM -->
 
+* [Example](#example)
 * [Release log](#release-log)
     * [Version 3.0.0](#version-300)
     * [Version 2.0.0](#version-200)
@@ -18,6 +19,12 @@ on without taking time to actually do it in person which many find disruptive.
 * [Original Author](#original-author)
 
 <!-- vim-markdown-toc -->
+
+## Example
+
+See `etc/example.yaml` for what the standup looks like
+
+![example image](./etc/example.png)
 
 ## Release log
 ### Version 3.0.0
