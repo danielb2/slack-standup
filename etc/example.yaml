@@ -1,0 +1,32 @@
+live: true
+text: '*slack-standup V2 update*'
+body:
+  new: >-
+    * dropping support for json. YAML makes more sense
+
+    * threadding support
+
+    regular lines have no bullets
+
+    * but others do :smile:
+
+    * everything is contained in one file. no more `_ts` file
+
+    * now using <https://www.npmjs.com/package/@slack/web-api|@slack/web-api>
+    instead of deprecated <https://www.npmjs.com/package/request|request>
+    package
+  threading: |-
+    if you just copy a link and  put it into the content of the yaml file
+    under the `thread:` section, it will be threadded.
+    for example
+    ```
+    thread: https://walmart.slack.com/archives/C5G525Q3U/p1599779930011400
+    ```
+  formatting: |-
+    * newlines now get bullets when prefixed by *
+    1. any number
+    3. gets incremented
+    * bullet between
+    1. doesn't matter. should it ? that's tricky
+ts: '1599796063.007800'
+channel: C5G525Q3U
