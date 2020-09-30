@@ -5,23 +5,45 @@ Slack standup is a script to make a daily status report easy using slack. When
 the whole team uses this, it gives a nice overview of what everyone is working
 on without taking time to actually do it in person which many find disruptive.
 
-Version 2.0.0
--------------
+## Table of Contents
+
+
+<!-- vim-markdown-toc GFM -->
+
+* [Release log](#release-log)
+    * [Version 3.0.0](#version-300)
+    * [Version 2.0.0](#version-200)
+* [Installation](#installation)
+* [Tips and tricks](#tips-and-tricks)
+* [Original Author](#original-author)
+
+<!-- vim-markdown-toc -->
+
+## Release log
+### Version 3.0.0
+- dropped supprot for JSON
+- swiched over to using slacks web-api
+- removed emdash at start of lines to be something special
+- use `1.` markdown syntax now for numbered lists
+- now allows for threadded slack updates
+
+### Version 2.0.0
 
 __NOTE__: slack-standup follows [XDG directory
 specification](http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html)
 
 
-Installation
-------------
+## Installation
 
 1. `npm install slack-standup -g`
 
 1. Go to https://api.slack.com/custom-integrations/legacy-tokens to create your slack token for use. (_NOTE_: patch is welcome for the new oauth)
 
+The above step is outdated. I don't know how to get a slack token anymore.
+They've made it really complicated. If you find out, tell me.
+
 1. create
-`$HOME/.config/slack-standup/slackrc.yaml` or
-`$HOME/.config/slack-standup/slackrc.json` depending on your preference.
+`$HOME/.config/slack-standup/slackrc.yaml`
 
     * properties:
         - `slack_token` - slack token from above
@@ -43,17 +65,14 @@ Installation
 2. TMUX Sessions
    * If you use tmux and sublime (or atom) you need to reattach the editor, you may have to install reattach-to-user-namespace. On newer versions of tmux, this shouldn't be necessary.
 
-Tips and tricks
----------------
+## Tips and tricks
 
 1. Automatic Conversions:
     * Stars (*) at the start of lines are converted to bullets
-    * Hash (#) at the start of the lines are converted to numbered lists
-    * Dash (-) at the start of lines are converted to endash
+    * Hash (1.) at the start of the lines are converted to automatically numbered lists
 
-1. Comments in standup JSON file:
-    * // commented lines are ignored and not ported to the next day
-    * "// commented strings" are ignored for POST'ing but saved in the JSON
+1. Comments in standup YAML file:
+    * \# commented lines are ignored and not ported to the next day
 
 1. Today to Yesterday:
     * When used daily, Today's lists are automatically appended to Yesterday's list. It will check posts for 7 days
@@ -65,6 +84,11 @@ Tips and tricks
     * You can do it via the application or
     * Re-run, change 'live' to false and quit; it will remove the post
 
-Original Author
-------
+1. Threaded:
+    - create a `thread:` top-level field to respond to  any thread in any channel. Get it by using slack's copy link in the UI.
+        ```yaml
+        thread: https://slack.com/archives/G0188U2CB/p1601478081930300
+        ```
+
+## Original Author
 * https://github.com/caseman72
