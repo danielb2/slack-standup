@@ -47,12 +47,10 @@ specification](http://standards.freedesktop.org/basedir-spec/basedir-spec-latest
 
 1. create an app with token at https://api.slack.com/apps/
 
-    users:write
-
     To get a working token you need to create a Slack app in your workspace with a user token. Here is one way on how to do that:
 
     1. Create a new Slack app in your workspace (you can give it any name).
-    2. Under Oauth & Permissions / User Token Scopes add all the required scopes as documented above.
+    2. Under Oauth & Permissions / User Token Scopes add the `users:write` scope.
     3. Install the app into your workspace
     4. After successful installation the token for your app will then shown under Basic Information / App Credentials.
 
