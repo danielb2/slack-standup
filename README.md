@@ -28,7 +28,7 @@ See `etc/example.yaml` for what the standup looks like
 
 ## Release log
 ### Version 3.0.0
-- dropped supprot for JSON
+- dropped support for JSON
 - swiched over to using slacks web-api
 - removed emdash at start of lines to be something special
 - use `1.` markdown syntax now for numbered lists
